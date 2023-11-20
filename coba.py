@@ -13,7 +13,7 @@ firefox_options = Options()
 
 # Create a new instance of the Firefox driver
 #driver = webdriver.Firefox(options=firefox_options)
-driver = webdriver.Firefox(executable_path='C:\Program Files\Mozilla Firefox', options=firefox_options)
+driver = webdriver.Firefox(executable_path='C:/Program Files/Mozilla Firefox', options=firefox_options)
 
 
 katakunci = input('Masukkan kata kunci : ')
