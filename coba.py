@@ -3,9 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-def scrape_shopee(search_query):
-    # Initialize a Selenium WebDriver (make sure to have geckodriver or chromedriver installed)
-    driver = webdriver.Firefox()
+def scrape_shopee(search_query, edge_driver_path):
+    # Initialize a Selenium WebDriver with Microsoft Edge
+    driver = webdriver.Edge(executable_path=edge_driver_path)
 
     # Shopee search URL
     shopee_url = f'https://shopee.com.my/search?keyword={search_query}'
@@ -45,10 +45,13 @@ st.title("Shopee Scraper App")
 # User input for the search query
 user_query = st.text_input("Enter the product you want to search on Shopee:")
 
-# Check if the user has entered a query
-if user_query:
+# User input for the path to Microsoft Edge Driver
+edge_driver_path = st.text_input("Enter the path to Microsoft Edge Driver:")
+
+# Check if the user has entered a query and the Edge driver path
+if user_query and edge_driver_path:
     # Scrape Shopee based on user input
-    results = scrape_shopee(user_query)
+    results = scrape_shopee(user_query, edge_driver_path)
 
     # Display the scraped results
     st.subheader("Scraped Results:")
