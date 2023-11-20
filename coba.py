@@ -13,12 +13,12 @@ def scrape_shopee(search_query):
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Extract product information (adjust this based on the Shopee page structure)
-        product_list = soup.find_all('div', class_='row shopee-search-item-result__items')
+        product_list = soup.find_all('div', class_='col-xs-2-4 shopee-search-item-result__item')
 
         for product in product_list:
             # Extract product details
-            product_name = product.find('div', class_='GD02sl _3AO1tA IXhE9E').text.strip()
-            product_price = product.find('span', class_='sHnxNa').text.strip()
+            product_name = product.find('div', class_='yQmmFK').text.strip()
+            product_price = product.find('span', class_='WTFwws').text.strip()
 
             # Print or process the extracted information
             print(f'Product Name: {product_name}\nProduct Price: {product_price}\n{"="*30}')
@@ -26,5 +26,8 @@ def scrape_shopee(search_query):
     else:
         print(f"Failed to fetch Shopee search results. Status code: {response.status_code}")
 
-# Example: Scraping Shopee for "laptop"
-scrape_shopee("laptop")
+# Get user input for the search query
+user_query = input("Enter the product you want to search on Shopee: ")
+
+# Example: Scraping Shopee based on user input
+scrape_shopee(user_query)
