@@ -316,8 +316,8 @@ class shopee():
                 time.sleep(3)
             else:
             # Handle other cases or raise an exception
-            print("Unexpected response format:", cek_produk)
-            break
+                print("Unexpected response format:", cek_produk)
+                break
 
         # merging json
         print("[+] Merging data produk ...")
