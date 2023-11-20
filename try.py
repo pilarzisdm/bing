@@ -6,7 +6,7 @@ import time
 
 opsi = webdriver.ChromeOptions()
 opsi.add_argument('--headless')
-servis = Service('chromedriver.exe')
+servis = Service('/home/codespace/.python/current/bin/python3 /workspaces/bing/chromedriver.exe')
 driver = webdriver.Chrome(service=servis, options=opsi)
 
 shopee_link = "https://shopee.co.id/search?keyword=macbook"
