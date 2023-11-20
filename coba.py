@@ -1,33 +1,58 @@
+import streamlit as st
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
 
 def scrape_shopee(search_query):
+    # Initialize a Selenium WebDriver (make sure to have geckodriver or chromedriver installed)
+    driver = webdriver.Firefox()
+
     # Shopee search URL
     shopee_url = f'https://shopee.com.my/search?keyword={search_query}'
 
-    # Send a GET request to the Shopee search page
-    response = requests.get(shopee_url)
+    # Open the Shopee search page
+    driver.get(shopee_url)
 
-    if response.status_code == 200:
-        # Parse the HTML content using BeautifulSoup
-        soup = BeautifulSoup(response.text, 'html.parser')
+    # Wait for the page to load (you might need to adjust the waiting time)
+    driver.implicitly_wait(10)
 
-        # Extract product information (adjust this based on the Shopee page structure)
-        product_list = soup.find_all('div', class_='col-xs-2-4 shopee-search-item-result__item')
+    # Get the page source after dynamic content is loaded
+    page_source = driver.page_source
 
-        for product in product_list:
-            # Extract product details
-            product_name = product.find('div', class_='yQmmFK').text.strip()
-            product_price = product.find('span', class_='WTFwws').text.strip()
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(page_source, 'html.parser')
 
-            # Print or process the extracted information
-            print(f'Product Name: {product_name}\nProduct Price: {product_price}\n{"="*30}')
+    # Extract product information (adjust this based on the Shopee page structure)
+    product_list = soup.find_all('div', class_='col-xs-2-4 shopee-search-item-result__item')
 
-    else:
-        print(f"Failed to fetch Shopee search results. Status code: {response.status_code}")
+    scraped_results = []
+    for product in product_list:
+        # Extract product details
+        product_name = product.find('div', class_='yQmmFK').text.strip()
+        product_price = product.find('span', class_='WTFwws').text.strip()
 
-# Get user input for the search query
-user_query = input("Enter the product you want to search on Shopee: ")
+        # Add the extracted information to the results list
+        scraped_results.append({'Product Name': product_name, 'Product Price': product_price})
 
-# Example: Scraping Shopee based on user input
-scrape_shopee(user_query)
+    # Close the WebDriver
+    driver.quit()
+
+    return scraped_results
+
+# Streamlit app
+st.title("Shopee Scraper App")
+
+# User input for the search query
+user_query = st.text_input("Enter the product you want to search on Shopee:")
+
+# Check if the user has entered a query
+if user_query:
+    # Scrape Shopee based on user input
+    results = scrape_shopee(user_query)
+
+    # Display the scraped results
+    st.subheader("Scraped Results:")
+    for result in results:
+        st.write(f"Product Name: {result['Product Name']}")
+        st.write(f"Product Price: {result['Product Price']}")
+        st.write("=" * 30)
