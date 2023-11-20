@@ -301,17 +301,23 @@ class shopee():
         a = 0
         b = 1
         while (True):
-            url_produk = base_url+"api/v4/shop/search_items?limit=100&offset="+str(a)+"&shopid="+str(self.idseller)
-            cek_produk = req.get(url_produk,headers=self.headerbrowser).json()
-            if (cek_produk["total_count"]==0):
+            url_produk = base_url + "api/v4/search/search_items?limit=100&offset=" + str(a) + "&shopid=" + str(self.idseller)
+            cek_produk = req.get(url_produk, headers=self.headerbrowser).json()
+    
+            # Check if 'total_count' key is present in the response
+            if 'total_count' in cek_produk and cek_produk["total_count"] == 0:
                 break
-            else:
-                print("-> download halaman "+ str(b) +" ("+ str(len(cek_produk["items"])) +")")
-                with open("data/"+str(self.idseller)+"_"+str(b)+'.json', 'w') as json_file:
+            elif 'items' in cek_produk:
+                print("-> download halaman " + str(b) + " (" + str(len(cek_produk["items"])) + ")")
+                with open("data/" + str(self.idseller) + "_" + str(b) + '.json', 'w') as json_file:
                     json.dump(cek_produk["items"], json_file)
                 a = a + 100
                 b = b + 1
                 time.sleep(3)
+            else:
+            # Handle other cases or raise an exception
+            print("Unexpected response format:", cek_produk)
+            break
 
         # merging json
         print("[+] Merging data produk ...")
