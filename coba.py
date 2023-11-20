@@ -1,19 +1,15 @@
-# shopee.py
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import re
-import csv
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
+import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
-import time
 
 chrome_options = Options()
 # chrome_options.add_argument('--headless')
 chrome_options.add_argument('log-level=2')
-driver = webdriver.Chrome(executable_path='./chromedriver', options=chrome_options)
+
+driver = webdriver.Chrome(options=chrome_options)
+
 katakunci = input('Masukkan kata kunci : ')
 
 def search(katakunci):
@@ -33,7 +29,7 @@ def search(katakunci):
             links.append(link.get('href'))
             print(link.get('href'))
     except TimeoutException:
-        print('failed to get links with query ' + line)
+        print('failed to get links with query ' + katakunci)
     return links
 
 product_urls = search(katakunci)
