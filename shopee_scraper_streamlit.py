@@ -23,11 +23,11 @@ def save_to_csv(seller_data, seller_id):
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerow({
-            "Seller ID": seller_data["data"]["shopid"],
-            "Shop Name": seller_data["data"]["name"],
-            "Total Products": seller_data["data"]["item_count"],
-            "Rating": seller_data["data"]["rating_star"],
-            "Location": seller_data["data"]["place"]
+            "Seller ID": seller_id,
+            "Shop Name": seller_data["name"],
+            "Total Products": seller_data["item_count"],
+            "Rating": seller_data["rating_star"],
+            "Location": seller_data["place"]
         })
 
 def main():
@@ -36,8 +36,9 @@ def main():
     if st.button("Get Seller Info"):
         seller_data = get_seller_info(seller_id)
         if seller_data:
-            save_to_csv(seller_data, seller_id)
+            save_to_csv(seller_data["data"], seller_id)
             st.success(f"Data saved to shopee_seller_{seller_id}.csv")
+            st.write(f"Location: {seller_data['data']['place']}")
         else:
             st.error("Error fetching data. Please check the seller ID.")
 
