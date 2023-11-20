@@ -13,7 +13,7 @@ import time
 chrome_options = Options()
 # chrome_options.add_argument('--headless')
 chrome_options.add_argument('log-level=2')
-driver = webdriver.Chrome('./chromedriver', options=chrome_options)
+driver = webdriver.Chrome(executable_path='./chromedriver', options=chrome_options)
 katakunci = input('Masukkan kata kunci : ')
 
 def search(katakunci):
