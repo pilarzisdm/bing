@@ -5,9 +5,11 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 
 chrome_options = Options()
+# Comment out the headless option for now
 # chrome_options.add_argument('--headless')
 chrome_options.add_argument('log-level=2')
 
+# Try running without specifying the executable_path
 driver = webdriver.Chrome(options=chrome_options)
 
 katakunci = input('Masukkan kata kunci : ')
@@ -33,3 +35,6 @@ def search(katakunci):
     return links
 
 product_urls = search(katakunci)
+
+# Close the WebDriver when finished
+driver.quit()
