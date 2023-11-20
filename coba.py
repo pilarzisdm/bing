@@ -11,10 +11,9 @@ from selenium.webdriver.chrome.options import Options
 import time
 
 chrome_options = Options()
-chrome_options.add_argument('--headless')
+# chrome_options.add_argument('--headless')
 chrome_options.add_argument('log-level=2')
-driver = webdriver.Chrome(options=chrome_options)
-
+driver = webdriver.Chrome('./chromedriver', options=chrome_options)
 katakunci = input('Masukkan kata kunci : ')
 
 def search(katakunci):
@@ -37,35 +36,4 @@ def search(katakunci):
         print('failed to get links with query ' + line)
     return links
 
-def get_product(produt_url):
-    try:
-        url = 'https://shopee.co.id' + produt_url
-        driver.get(url)
-        time.sleep(3)
-        driver.execute_script('window.scrollTo(0, 1500);')
-        time.sleep(3)
-        WebDriverWait(driver, timeout).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, 'OSgLcw')))
-        soup_b = BeautifulSoup(driver.page_source, 'html.parser')
-        title = soup_b.find('span', class_='OSgLcw').text
-        price = soup_b.find('div', class_='_3n5NQx').text
-        try:
-            image = soup_b.find('div', class_='_2JMB9h _3XaILN')['style']
-            imgurl = re.findall('url\((.*?)\)', image)
-        except:
-            imgurl = 'none'
-        desc = soup_b.find('div', class_='_2u0jt9').text
-        print('Scraping ' + title)
-        with open('result.csv','a', encoding='utf-8',newline='') as f:
-            writer=csv.writer(f)
-            writer.writerow([title,price,url,desc,imgurl])
-
-    except TimeoutException:
-        print('cant open the link')
-
-products_urls = search(katakunci)
-
-for product_url in products_urls:
-    get_product(product_url)
-
-driver.quit()
+product_urls = search(katakunci)
