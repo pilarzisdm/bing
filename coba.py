@@ -1,46 +1,30 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+import requests
 from bs4 import BeautifulSoup
-import time
 
-# Set up Firefox options
-firefox_options = Options()
-# firefox_options.headless = True  # Uncomment this line if you want to run in headless mode
+def scrape_shopee(search_query):
+    # Shopee search URL
+    shopee_url = f'https://shopee.com.my/search?keyword={search_query}'
 
-# Create a new instance of the Firefox driver
-driver = webdriver.Firefox(options=firefox_options)
+    # Send a GET request to the Shopee search page
+    response = requests.get(shopee_url)
 
-katakunci = input('Masukkan kata kunci : ')
+    if response.status_code == 200:
+        # Parse the HTML content using BeautifulSoup
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-def search(katakunci):
-    links = []
-    print('mencari semua product dengan kata kunci ' + katakunci)
-    url = 'https://shopee.co.id/search?keyword=' + katakunci
-    try:
-        driver.get(url)
-        time.sleep(5)
-        driver.execute_script('window.scrollTo(0, 1500);')
-        time.sleep(5)
-        driver.execute_script('window.scrollTo(0, 2500);')
-        time.sleep(5)
+        # Extract product information (adjust this based on the Shopee page structure)
+        product_list = soup.find_all('div', class_='row shopee-search-item-result__items')
 
-        # Wait for the page to load (adjust the timeout as needed)
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'shopee-search-item-result__items')))
+        for product in product_list:
+            # Extract product details
+            product_name = product.find('div', class_='Bn8MAD').text.strip()
+            product_price = product.find('span', class_='WTFwws').text.strip()
 
-        soup_a = BeautifulSoup(driver.page_source, 'html.parser')
-        products = soup_a.find('div', class_='row shopee-search-item-result__items')
-        for link in products.find_all('a'):
-            links.append(link.get('href'))
-            print(link.get('href'))
-    except TimeoutException:
-        print('failed to get links with query ' + katakunci)
-    return links
+            # Print or process the extracted information
+            print(f'Product Name: {product_name}\nProduct Price: {product_price}\n{"="*30}')
 
-product_urls = search(katakunci)
+    else:
+        print(f"Failed to fetch Shopee search results. Status code: {response.status_code}")
 
-# Close the WebDriver when finished
-driver.quit()
+# Example: Scraping Shopee for "laptop"
+scrape_shopee("laptop")
