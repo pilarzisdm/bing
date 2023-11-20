@@ -17,8 +17,8 @@ def scrape_shopee(search_query):
 
         for product in product_list:
             # Extract product details
-            product_name = product.find('div', class_='Bn8MAD').text.strip()
-            product_price = product.find('span', class_='WTFwws').text.strip()
+            product_name = product.find('div', class_='GD02sl _3AO1tA IXhE9E').text.strip()
+            product_price = product.find('span', class_='sHnxNa').text.strip()
 
             # Print or process the extracted information
             print(f'Product Name: {product_name}\nProduct Price: {product_price}\n{"="*30}')
