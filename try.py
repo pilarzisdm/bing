@@ -8,6 +8,10 @@ opsi = webdriver.ChromeOptions()
 opsi.add_argument('--headless')
 servis = Service('/workspaces/bing/chromedriver.exe')
 driver = webdriver.Chrome(service=servis, options=opsi)
+#chmod +x /workspaces/bing/chromedriver.exe
+
+
+
 
 shopee_link = "https://shopee.co.id/search?keyword=macbook"
 driver.set_window_size(1300,800)
