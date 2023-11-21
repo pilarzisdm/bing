@@ -6,7 +6,8 @@ import time
 
 opsi = webdriver.ChromeOptions()
 opsi.add_argument('--headless')
-servis = Service('/workspaces/bing/chromedriver.exe')
+#servis = Service('/workspaces/bing/chromedriver.exe')
+servis = Service('/workspaces/bing/')
 driver = webdriver.Chrome(service=servis, options=opsi)
 #chmod +x /workspaces/bing/chromedriver.exe
 
